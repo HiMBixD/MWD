@@ -11,12 +11,10 @@ import tch1904.mwd.constant.components.Message;
 import tch1904.mwd.constant.components.response.AppResponse;
 import tch1904.mwd.constant.components.response.AppResponseFailure;
 import tch1904.mwd.constant.components.response.AppResponseSuccess;
-import tch1904.mwd.controllers.request.ActiveAccountRequest;
-import tch1904.mwd.controllers.request.AddMoneyRequest;
-import tch1904.mwd.controllers.request.ChangePasswordRequest;
-import tch1904.mwd.controllers.request.UpdateAccountRequest;
+import tch1904.mwd.controllers.request.*;
 import tch1904.mwd.entity.dto.UserDTO;
 import tch1904.mwd.services.CommonServices;
+import tch1904.mwd.services.RequestServices;
 import tch1904.mwd.services.UserService;
 
 @RestController
@@ -29,7 +27,8 @@ public class UmCommonController {
 
     @Autowired
     private CommonServices commonServices;
-
+    @Autowired
+    private RequestServices requestServices;
     @PostMapping("/getMyInfo")
     public AppResponse getMyInfo() {
         try {
@@ -82,9 +81,6 @@ public class UmCommonController {
     @PostMapping("/updateProfile")
     public AppResponse updateProfile(@RequestBody UpdateAccountRequest request) {
         try {
-            if (StringUtils.isEmpty(request.getUsername())) {
-                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "username"));
-            }
             if (StringUtils.isEmpty(request.getEmail())) {
                 throw new AppResponseException(new Message(AppConstants.NOT_NULL, "email"));
             }
@@ -95,6 +91,24 @@ public class UmCommonController {
                 throw new AppResponseException(new Message(AppConstants.NOT_NULL, "fullName"));
             }
             userService.updateProfile(request);
+            return new AppResponseSuccess();
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/changePassword")
+    public AppResponse changePassword(@RequestBody ChangePassRequest request) {
+        try {
+            if (StringUtils.isEmpty(request.getOldPass())) {
+                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "Old Password"));
+            }
+            if (StringUtils.isEmpty(request.getNewPass())) {
+                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "New Password"));
+            }
+            userService.changePasswordAuth(request);
             return new AppResponseSuccess();
         } catch (AppResponseException exception) {
             return new AppResponseFailure(exception.responseMessage);
@@ -114,6 +128,17 @@ public class UmCommonController {
             }
             userService.addRequestAddMoney(request);
             return new AppResponseSuccess();
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/findRequestAddMoney")
+    public AppResponse findRequestAddMoney(@RequestBody SearchRequestAddMoneyRequest request) {
+        try {
+            return new AppResponseSuccess(requestServices.findRequestAddMoney(request));
         } catch (AppResponseException exception) {
             return new AppResponseFailure(exception.responseMessage);
         } catch (Exception e) {

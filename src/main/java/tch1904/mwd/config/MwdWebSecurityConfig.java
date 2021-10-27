@@ -31,7 +31,7 @@ public class MwdWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/admin/*").hasRole("ADMIN")
                 .antMatchers("/api/singer/*").hasRole("SINGER")
                 .antMatchers("/api/user/*", "/api/*").hasAnyRole("ADMIN", "SINGER", "USER")
-                .antMatchers("/auth").permitAll()
+                .antMatchers("/unau/*").permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()

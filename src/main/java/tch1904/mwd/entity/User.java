@@ -32,6 +32,9 @@ public class User {
     @Column(name = "otp", length = 200)
     private String otp;
 
+    @Column(name = "avatar", length = 255)
+    private String avatar;
+
     @Column(name = "otp_expire")
     private Instant otpExpire;
 

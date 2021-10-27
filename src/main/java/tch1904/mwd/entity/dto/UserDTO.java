@@ -22,6 +22,8 @@ public class UserDTO {
 
     private Double money;
 
+    private String avatar;
+
     private Boolean isActive;
 
     private Integer roleId;
@@ -34,5 +36,6 @@ public class UserDTO {
         this.money = user.getMoney();
         this.isActive = user.isActive();
         this.roleId = user.getRoleId();
+        this.avatar = user.getAvatar();
     }
 }
