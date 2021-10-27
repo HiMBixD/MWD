@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UpdateAccountRequest {
-    private String email;
-    private String phone;
-    private String fullName;
+public class SearchRequestAddMoneyRequest {
+    private String username;
+    private Integer status;
 }

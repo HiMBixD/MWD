@@ -14,6 +14,7 @@ import tch1904.mwd.controllers.request.ApproveAddMoneyRequest;
 import tch1904.mwd.controllers.request.FindUsersRequest;
 import tch1904.mwd.repository.UserRepository;
 import tch1904.mwd.services.CommonServices;
+import tch1904.mwd.services.RequestServices;
 import tch1904.mwd.services.UserService;
 
 @RestController
@@ -28,6 +29,8 @@ public class AdminController {
     private JwtProvider jwtProvider;
     @Autowired
     private CommonServices commonServices;
+    @Autowired
+    private RequestServices requestServices;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -53,4 +56,6 @@ public class AdminController {
             return new AppResponseFailure(e.getMessage());
         }
     }
+
+
 }

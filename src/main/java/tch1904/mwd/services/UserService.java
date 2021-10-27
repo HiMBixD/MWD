@@ -92,20 +92,16 @@ public class UserService {
 
     public void updateProfile(UpdateAccountRequest request) {
         try {
-            Optional<User> optional = findByUsername(request.getUsername());
+            Optional<User> optional = findByUsername(commonServices.getCurrentUser().getUsername());
             if (optional.isEmpty()) {
                 throw new AppResponseException(new Message(AppConstants.NOT_FOUND, "Username"));
             }
             User user = optional.get();
             user.setFullName(request.getFullName());
             user.setPhone(request.getPhone());
-            if (!user.getEmail().equals(request.getEmail())) {
-                if (StringUtils.isEmpty(request.getOtp())) {
-                    throw new AppResponseException(new Message(AppConstants.NOT_NULL, "Otp"));
-                }
-                verifyOtp(request.getOtp(), request.getUsername());
+            if (!user.isActive()) {
+                user.setEmail(request.getEmail());
             }
-            user.setEmail(request.getEmail());
             userRepository.save(user);
         } catch (Exception e){
             throw e;
@@ -166,6 +162,22 @@ public class UserService {
         try {
             User user = verifyOtp(request.getOtp(), request.getUsername());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(user);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+    public void changePasswordAuth(ChangePassRequest request) {
+        try {
+            Optional<User> optional = findByUsername(commonServices.getCurrentUser().getUsername());
+            if (optional.isEmpty()) {
+                throw new AppResponseException(new Message(AppConstants.NOT_FOUND, "Username"));
+            }
+            if (!passwordEncoder.matches(request.getOldPass(), optional.get().getPassword())) {
+                throw new AppResponseException(new Message(AppConstants.INVALID, "Old Password"));
+            }
+            User user = optional.get();
+            user.setPassword(passwordEncoder.encode(request.getNewPass()));
             userRepository.save(user);
         }catch (Exception e){
             throw e;
