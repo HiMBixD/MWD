@@ -135,6 +135,21 @@ public class UmCommonController {
         }
     }
 
+    @PostMapping("/setUserAvatar")
+    public AppResponse setUserAvatar(@RequestBody SimpleStringRequest request) {
+        try {
+            if (StringUtils.isEmpty(request.getString())) {
+                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "Avatar url"));
+            }
+            userService.setUserAvatar(request);
+            return new AppResponseSuccess();
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
     @PostMapping("/findRequestAddMoney")
     public AppResponse findRequestAddMoney(@RequestBody SearchRequestAddMoneyRequest request) {
         try {

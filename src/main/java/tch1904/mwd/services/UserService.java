@@ -264,4 +264,18 @@ public class UserService {
             throw e;
         }
     }
+
+    public void setUserAvatar(SimpleStringRequest request) {
+        try {
+            Optional<User> optional = findByUsername(this.commonServices.getCurrentUser().getUsername());
+            if (optional.isEmpty()) {
+                throw new AppResponseException(new Message(AppConstants.NOT_FOUND, "Username"));
+            }
+            User user = optional.get();
+            user.setAvatar(request.getString());
+            userRepository.save(user);
+        } catch (Exception e){
+            throw e;
+        }
+    }
 }

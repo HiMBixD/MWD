@@ -14,18 +14,19 @@ import tch1904.mwd.entity.FileImg;
 import tch1904.mwd.entity.dto.FileMusic;
 import tch1904.mwd.services.FileServices;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Base64;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
 public class FileController {
     @Autowired
     FileServices fileServices;
 
-    @PostMapping("/uploadImg")
+    @PostMapping("/api/uploadImg")
     public AppResponse uploadFileImg(UploadFileRequest request) throws Exception {
         try {
             return new AppResponseSuccess(fileServices.addFileImg(request));
@@ -36,19 +37,21 @@ public class FileController {
         }
     }
 
-    @GetMapping("/imgs/{id}")
-    public String getFileImg(@PathVariable String id, Model model) {
+    @GetMapping("unau/imgs/{id}")
+    public void getFileImg(@PathVariable String id, HttpServletResponse response) throws IOException {
         FileImg fileImg = fileServices.getFileImg(id);
-        model.addAttribute("description", fileImg.getDescription());
-        model.addAttribute("image",
-                Base64.getEncoder().encodeToString(fileImg.getImage().getData()));
-        return "imgs";
+        response.setContentType("application/x-download");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileImg.getFileName());
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.getOutputStream().write(fileImg.getImage().getData());
     }
 
-    @PostMapping("/uploadMusic")
+
+    @PostMapping("/api/uploadFileMusic")
     public AppResponse uploadFileMusic(UploadFileRequest request) throws Exception {
         try {
-            return new AppResponseSuccess(fileServices.addFileMusic(request));
+            return new AppResponseSuccess(fileServices.uploadFileMusic(request));
         } catch (AppResponseException exception) {
             return new AppResponseFailure(exception.responseMessage);
         } catch (IOException exception) {
@@ -57,17 +60,15 @@ public class FileController {
     }
 
 
-    @GetMapping("/musics/{id}")
-    public String getFileMusic(@PathVariable String id, Model model) throws Exception {
-        FileMusic fileMusic = fileServices.getFileMusic(id);
-        model.addAttribute("description", fileMusic.getDescription());
-        model.addAttribute("url", "/musics/stream/" + id);
-        return "musics";
-    }
-
-    @GetMapping("/musics/stream/{id}")
+    @GetMapping("unau/stream/{id}")
     public void streamMusic(@PathVariable String id, HttpServletResponse response) throws Exception {
         FileMusic fileMusic = fileServices.getFileMusic(id);
         FileCopyUtils.copy(fileMusic.getStream(), response.getOutputStream());
+    }
+
+    @GetMapping("unau/getFile/{id}")
+    public void getFileMusic(@PathVariable String id, HttpServletResponse response) throws Exception {
+        FileMusic fileMusic = fileServices.getFileMusic(id);
+        response.getOutputStream().write(fileMusic.getStream().read());
     }
 }
