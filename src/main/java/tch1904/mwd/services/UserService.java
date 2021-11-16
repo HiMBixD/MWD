@@ -271,6 +271,8 @@ public class UserService {
             RequestPublishProduct publishProduct = new RequestPublishProduct();
             publishProduct.setProductId(request.getProductId());
             publishProduct.setPrice(request.getPrice());
+            publishProduct.setProductType(request.getProductType());
+            publishProduct.setProductName(request.getProductName());
             publishProduct.setUsername(optional.get().getUsername());
             publishProduct.setStatus(0);
             publishProduct.setCreate_time(Instant.now());
@@ -306,7 +308,7 @@ public class UserService {
             requestAddMoneyRepository.save(addMoney);
             if (request.getType() == 2) {
                 String detailMessage = "<p><span style=\"font-family:Times New Roman,Times,serif\"><span style=\"font-size:14px\"><span style=\"color:#000000\">Reason: " + request.getReason() + "</span></span></span></p>";
-                String typeApproveMessage = "<p><span style=\"font-family:Times New Roman,Times,serif\"><span style=\"font-size:14px\"><span style=\"color:#000000\">Your Request To Register As New Singer has been: " + "<strong>" + "Denied" + "</strong>" + "</span></span></span></p>";
+                String typeApproveMessage = "<p><span style=\"font-family:Times New Roman,Times,serif\"><span style=\"font-size:14px\"><span style=\"color:#000000\">Your Request To Add money has been: " + "<strong>" + "Denied" + "</strong>" + "</span></span></span></p>";
                 sendEmailAfterApprove(detailMessage, typeApproveMessage, user);
             }
         }catch (Exception e){
@@ -376,6 +378,8 @@ public class UserService {
                     throw new AppResponseException(new Message(AppConstants.NOT_MATCHED, "username request and product owner"));
                 }
                 Product product = optionalProduct.get();
+                product.setProductName(optional.get().getProductName());
+                product.setProductType(optional.get().getProductType());
                 product.setIsPublished(true);
                 product.setPrice(optional.get().getPrice());
                 productRepository.save(product);

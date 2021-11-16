@@ -156,6 +156,17 @@ public class UmCommonController {
         }
     }
 
+    @PostMapping("/findRequestBeSinger")
+    public AppResponse findRequestBeSinger(@RequestBody SearchRequestListRequest request) {
+        try {
+            return new AppResponseSuccess(requestServices.findRequestBeSinger(request));
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
     @PostMapping("/setUserAvatar")
     public AppResponse setUserAvatar(@RequestBody SimpleStringRequest request) {
         try {
@@ -172,7 +183,7 @@ public class UmCommonController {
     }
 
     @PostMapping("/findRequestAddMoney")
-    public AppResponse findRequestAddMoney(@RequestBody SearchRequestAddMoneyRequest request) {
+    public AppResponse findRequestAddMoney(@RequestBody SearchRequestListRequest request) {
         try {
             return new AppResponseSuccess(requestServices.findRequestAddMoney(request));
         } catch (AppResponseException exception) {
@@ -193,6 +204,17 @@ public class UmCommonController {
             }
             userService.requestPublishProduct(request);
             return new AppResponseSuccess();
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/findRequestPublishProduct")
+    public AppResponse findRequestPublishProduct(@RequestBody SearchRequestListRequest request) {
+        try {
+            return new AppResponseSuccess(requestServices.findRequestPublishProduct(request));
         } catch (AppResponseException exception) {
             return new AppResponseFailure(exception.responseMessage);
         } catch (Exception e) {

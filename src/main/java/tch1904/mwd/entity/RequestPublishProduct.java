@@ -29,6 +29,12 @@ public class RequestPublishProduct {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "product_name")
+    private String productName;
+
+    @Column(name = "product_type")
+    private String productType;
+
     @Column(name = "status")
     private Integer status;
 

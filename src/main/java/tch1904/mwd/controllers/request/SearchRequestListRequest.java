@@ -10,7 +10,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SearchRequestAddMoneyRequest {
+public class SearchRequestListRequest {
     private String username;
     private Integer status;
     private Pagination pagination;

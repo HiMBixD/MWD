@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class PublishProductRequest {
     private Double price;
     private Integer productId;
+    private String productName;
+    private String productType;
 }
