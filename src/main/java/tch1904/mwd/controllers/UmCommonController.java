@@ -258,16 +258,16 @@ public class UmCommonController {
         }
     }
 
-    @PostMapping("/searchProduct")
-    public AppResponse searchProduct(@RequestBody SearchProductRequest request) {
-        try {
-            return new AppResponseSuccess(productServices.searchProduct(request));
-        } catch (AppResponseException exception) {
-            return new AppResponseFailure(exception.responseMessage);
-        } catch (Exception e) {
-            return new AppResponseFailure(e.getMessage());
-        }
-    }
+//    @PostMapping("/searchProduct")
+//    public AppResponse searchProduct(@RequestBody SearchProductRequest request) {
+//        try {
+//            return new AppResponseSuccess(productServices.searchProduct(request));
+//        } catch (AppResponseException exception) {
+//            return new AppResponseFailure(exception.responseMessage);
+//        } catch (Exception e) {
+//            return new AppResponseFailure(e.getMessage());
+//        }
+//    }
 
     @PostMapping("/getListOwnProduct")
     public AppResponse getListOwnProduct() {
@@ -279,6 +279,18 @@ public class UmCommonController {
             return new AppResponseFailure(e.getMessage());
         }
     }
+
+    @PostMapping("/isOwnProduct")
+    public AppResponse isOwnProduct(@RequestBody SimpleStringRequest request) {
+        try {
+            return new AppResponseSuccess(productServices.isOwnProduct(Integer.parseInt(request.getString())));
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
 
     @PostMapping("/buyProduct")
     public AppResponse buyProduct(@RequestBody SimpleStringRequest request) {
@@ -377,14 +389,4 @@ public class UmCommonController {
         }
     }
 
-    @PostMapping("/loadAllComments")
-    public AppResponse loadAllComments(@RequestBody SearchCommentRequest request) {
-        try {
-            return new AppResponseSuccess(userService.loadAllComments(request));
-        } catch (AppResponseException exception) {
-            return new AppResponseFailure(exception.responseMessage);
-        } catch (Exception e) {
-            return new AppResponseFailure(e.getMessage());
-        }
-    }
 }

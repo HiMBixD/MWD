@@ -382,6 +382,7 @@ public class UserService {
                 product.setProductType(optional.get().getProductType());
                 product.setIsPublished(true);
                 product.setPrice(optional.get().getPrice());
+                product.setPublishTime(Instant.now());
                 productRepository.save(product);
                 saveMoney(false, optional.get().getPrice() * AppConstants.PUBLISH_SONG_FEE, optional.get().getUsername());
             }

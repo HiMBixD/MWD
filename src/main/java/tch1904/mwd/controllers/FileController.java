@@ -1,6 +1,9 @@
 package tch1904.mwd.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import tch1904.mwd.constant.components.AppResponseException;
@@ -12,6 +15,8 @@ import tch1904.mwd.controllers.request.*;
 import tch1904.mwd.entity.FileImg;
 import tch1904.mwd.entity.dto.FileMusic;
 import tch1904.mwd.services.FileServices;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -109,6 +114,16 @@ public class FileController {
     }
 
 
+    @GetMapping("unau/get/{id}")
+    public ResponseEntity<Resource> getFile(@PathVariable String id) throws Exception {
+        // Load file from database
+        FileMusic fileMusic = fileServices.getFileMusic(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(fileMusic.getMetadata().getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileMusic.getMetadata().getFileName() + "\"")
+                .body(new ByteArrayResource(fileMusic.getStream().readAllBytes()));
+    }
 
 //    @GetMapping("unau/getFile/{id}")
 //    public void getFileMusic(@PathVariable String id, HttpServletResponse response) throws Exception {

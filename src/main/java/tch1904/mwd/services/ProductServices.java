@@ -141,6 +141,15 @@ public class ProductServices {
         }
     }
 
+    public Boolean isOwnProduct(Integer productId) {
+        try {
+            return userProductRepository
+                    .findByUsernameAndProductId(commonServices.getCurrentUser().getUsername(), productId).isPresent();
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
     public void buyProduct(Integer productId) {
         try {
             if (StringUtils.isEmpty(productId)) {
@@ -193,6 +202,29 @@ public class ProductServices {
         }
     }
 
+    public Product getProductInfo(String fileId) {
+        try {
+            return productRepository
+                    .findByFileId(fileId).get();
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    public void addViewed(Integer productId) {
+        try {
+            Optional<Product> optional = productRepository.findById(productId);
+            if (optional.isEmpty()) {
+                throw new AppResponseException(new Message(AppConstants.NOT_FOUND, "Product To Add View"));
+            }
+            Product product = optional.get();
+            product.setTotalView(optional.get().getTotalView() + 1);
+            productRepository.save(product);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
     public void createPlayList(CreatePlayListRequest request) {
         try {
             if (StringUtils.isEmpty(request.getTitle())) {
@@ -234,6 +266,14 @@ public class ProductServices {
         }
     }
 
+    public List<PlayListProduct> getRecommendSongs() {
+        try {
+            return playListProductRepository.getRecommendSongs();
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
     public void addToPlayList(AddOrDeleteItemOfPlayListRequest request) {
         try {
             if (StringUtils.isEmpty(request.getListId())) {
@@ -242,7 +282,7 @@ public class ProductServices {
             if (StringUtils.isEmpty(request.getProductId())) {
                 throw new AppResponseException(new Message(AppConstants.NOT_NULL, "ProductId"));
             }
-            Optional<Product> optionalProduct = productRepository.findById(request.getListId());
+            Optional<Product> optionalProduct = productRepository.findById(request.getProductId());
             if (optionalProduct.isEmpty()) {
                 throw new AppResponseException(new Message(AppConstants.NOT_FOUND, "Product"));
             }
@@ -292,5 +332,4 @@ public class ProductServices {
             throw e;
         }
     }
-
 }

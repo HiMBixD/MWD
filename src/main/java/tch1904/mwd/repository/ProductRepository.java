@@ -17,10 +17,10 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
 //                                                    @Param("status")Integer status, Pageable pageable);
 
     Optional<Product> findByFileId(String fileId);
-    @Query("FROM Product r WHERE r.username LIKE CONCAT('%',:username,'%') " +
-            "and r.productType LIKE CONCAT('%',:productType,'%')" +
-            "and r.productName LIKE CONCAT('%',:productName,'%')" +
-            "and r.isPublished = :isPublished"
+    @Query("FROM Product r WHERE lower(r.username) LIKE lower(CONCAT('%',:username,'%')) " +
+            "and lower(r.productType) LIKE lower(CONCAT('%',:productType,'%'))" +
+            "and lower(r.productName) LIKE lower(CONCAT('%',:productName,'%'))" +
+            "and r.isPublished = :isPublished ORDER BY r.publishTime DESC"
     )
     Page<Product> searchProduct(String username, String productName, String productType, Boolean isPublished, Pageable pageable);
 

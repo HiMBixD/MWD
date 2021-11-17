@@ -9,6 +9,11 @@ import java.time.Instant;
 @Table(name = "user_product")
 @Data
 public class UserProduct {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
     @Column(name = "product_id", nullable = false)
     private Integer productId;
 
@@ -21,9 +26,5 @@ public class UserProduct {
     @Column(name = "is_own")
     private Boolean isOwn;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private String id;
 
 }
