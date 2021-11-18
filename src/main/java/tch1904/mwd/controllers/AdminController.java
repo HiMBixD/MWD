@@ -10,6 +10,7 @@ import tch1904.mwd.constant.components.response.AppResponseFailure;
 import tch1904.mwd.constant.components.response.AppResponseSuccess;
 import tch1904.mwd.controllers.request.ApproveRequest;
 import tch1904.mwd.controllers.request.FindUsersRequest;
+import tch1904.mwd.controllers.request.SearchRequestListRequest;
 import tch1904.mwd.repository.UserRepository;
 import tch1904.mwd.services.CommonServices;
 import tch1904.mwd.services.RequestServices;
@@ -60,6 +61,39 @@ public class AdminController {
         try {
             userService.approveRegisterSinger(request);
             return new AppResponseSuccess();
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/findRequestBeSinger")
+    public AppResponse findRequestBeSinger(@RequestBody SearchRequestListRequest request) {
+        try {
+            return new AppResponseSuccess(requestServices.findRequestBeSinger(request));
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/findRequestAddMoney")
+    public AppResponse findRequestAddMoney(@RequestBody SearchRequestListRequest request) {
+        try {
+            return new AppResponseSuccess(requestServices.findRequestAddMoney(request));
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/findRequestPublishProduct")
+    public AppResponse findRequestPublishProduct(@RequestBody SearchRequestListRequest request) {
+        try {
+            return new AppResponseSuccess(requestServices.findRequestPublishProduct(request));
         } catch (AppResponseException exception) {
             return new AppResponseFailure(exception.responseMessage);
         } catch (Exception e) {

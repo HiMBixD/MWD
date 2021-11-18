@@ -156,17 +156,6 @@ public class UmCommonController {
         }
     }
 
-    @PostMapping("/findRequestBeSinger")
-    public AppResponse findRequestBeSinger(@RequestBody SearchRequestListRequest request) {
-        try {
-            return new AppResponseSuccess(requestServices.findRequestBeSinger(request));
-        } catch (AppResponseException exception) {
-            return new AppResponseFailure(exception.responseMessage);
-        } catch (Exception e) {
-            return new AppResponseFailure(e.getMessage());
-        }
-    }
-
     @PostMapping("/setUserAvatar")
     public AppResponse setUserAvatar(@RequestBody SimpleStringRequest request) {
         try {
@@ -175,17 +164,6 @@ public class UmCommonController {
             }
             userService.setUserAvatar(request);
             return new AppResponseSuccess();
-        } catch (AppResponseException exception) {
-            return new AppResponseFailure(exception.responseMessage);
-        } catch (Exception e) {
-            return new AppResponseFailure(e.getMessage());
-        }
-    }
-
-    @PostMapping("/findRequestAddMoney")
-    public AppResponse findRequestAddMoney(@RequestBody SearchRequestListRequest request) {
-        try {
-            return new AppResponseSuccess(requestServices.findRequestAddMoney(request));
         } catch (AppResponseException exception) {
             return new AppResponseFailure(exception.responseMessage);
         } catch (Exception e) {
@@ -211,16 +189,7 @@ public class UmCommonController {
         }
     }
 
-    @PostMapping("/findRequestPublishProduct")
-    public AppResponse findRequestPublishProduct(@RequestBody SearchRequestListRequest request) {
-        try {
-            return new AppResponseSuccess(requestServices.findRequestPublishProduct(request));
-        } catch (AppResponseException exception) {
-            return new AppResponseFailure(exception.responseMessage);
-        } catch (Exception e) {
-            return new AppResponseFailure(e.getMessage());
-        }
-    }
+
 
     @PostMapping("/addView")
     public AppResponse addView(@RequestBody SimpleStringRequest request) {
