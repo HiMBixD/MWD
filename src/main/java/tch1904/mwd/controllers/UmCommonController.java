@@ -354,9 +354,9 @@ public class UmCommonController {
     }
 
     @PostMapping("/removeFromPlayList")
-    public AppResponse removeFromPlayList(@RequestBody AddOrDeleteItemOfPlayListRequest request) {
+    public AppResponse removeFromPlayList(@RequestBody SimpleStringRequest request) {
         try {
-            productServices.removeFromPlayList(request);
+            productServices.removeFromPlayList(Integer.parseInt(request.getString()));
             return new AppResponseSuccess();
         } catch (AppResponseException exception) {
             return new AppResponseFailure(exception.responseMessage);

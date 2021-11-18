@@ -95,4 +95,26 @@ public class UnAuthController {
             return new AppResponseFailure(e.getMessage());
         }
     }
+
+    @PostMapping("/getTopSelling")
+    public AppResponse getTopSelling() {
+        try {
+            return new AppResponseSuccess(productServices.getTopSelling());
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/getTopSellingFromUser")
+    public AppResponse getTopSellingFromUser(@RequestBody SimpleStringRequest request) {
+        try {
+            return new AppResponseSuccess(productServices.getTopSellingFromUser(request.getString()));
+        } catch (AppResponseException exception) {
+            return new AppResponseFailure(exception.responseMessage);
+        } catch (Exception e) {
+            return new AppResponseFailure(e.getMessage());
+        }
+    }
 }

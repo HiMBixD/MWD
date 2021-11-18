@@ -21,4 +21,6 @@ public interface UserProductRepository extends JpaRepository<UserProduct, String
 
     Optional<UserProduct> findByUsernameAndProductId(String username, Integer productId);
 
+    List<UserProduct> findAllByProductIdAndMarkIsNotNull(Integer productId);
+
 }

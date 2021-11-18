@@ -118,11 +118,11 @@ public class ProductServices {
             } else {
                 userProduct.setProductId(request.getProductId());
                 userProduct.setMark(request.getMark());
+                userProduct.setIsOwn(false);
                 userProduct.setUsername(commonServices.getCurrentUser().getUsername());
             }
             userProductRepository.save(userProduct);
-
-            List<UserProduct> markTable = userProductRepository.findAllByProductId(request.getProductId());
+            List<UserProduct> markTable = userProductRepository.findAllByProductIdAndMarkIsNotNull(request.getProductId());
             Product product = optional.get();
             product.setMark(markTable.stream().mapToDouble(UserProduct::getMark).average().orElse(0.0));
             product.setTotalMark((markTable.size()));
@@ -197,6 +197,22 @@ public class ProductServices {
             Pageable pageable = PageRequest.of(request.getPagination().getPageNumber(), request.getPagination().getPageSize());
             return productRepository.searchProduct(
                     request.getUsername(), request.getProductName(), request.getProductType(), request.getIsPublish(), pageable);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    public List<Product> getTopSelling() {
+        try {
+            return productRepository.findTop10ByIsPublishedIsTrueOrderByTotalBuyDesc();
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    public List<Product> getTopSellingFromUser(String username) {
+        try {
+            return productRepository.findTop10ByUsernameAndIsPublishedIsTrueOrderByTotalBuyDesc(username);
         }catch (Exception e){
             throw e;
         }
@@ -305,25 +321,14 @@ public class ProductServices {
         }
     }
 
-    public void removeFromPlayList(AddOrDeleteItemOfPlayListRequest request) {
+    public void removeFromPlayList(Integer itemId) {
         try {
-            if (StringUtils.isEmpty(request.getListId())) {
-                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "ListId"));
-            }
-            if (StringUtils.isEmpty(request.getProductId())) {
-                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "ProductId"));
-            }
-            Optional<Product> optionalProduct = productRepository.findById(request.getListId());
-            if (optionalProduct.isEmpty()) {
-                throw new AppResponseException(new Message(AppConstants.NOT_FOUND, "Product"));
-            }
-            Optional<PlayList> optionalPlayList = playListRepository.findById(request.getListId());
-            if (optionalPlayList.isEmpty()) {
-                throw new AppResponseException(new Message(AppConstants.NOT_FOUND, "PlayList"));
+            if (StringUtils.isEmpty(itemId)) {
+                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "itemId"));
             }
             Optional<PlayListProduct> optionalPlayListProduct =
                     playListProductRepository
-                            .findByProductAndAndListId(optionalProduct.get(), request.getListId());
+                            .findById(itemId);
             if (optionalPlayListProduct.isEmpty()) {
                 throw new AppResponseException(new Message(AppConstants.EXISTED, "Song is not in this PlayList"));
             }
