@@ -18,10 +18,7 @@ import tch1904.mwd.entity.Product;
 import tch1904.mwd.entity.UserProduct;
 import tch1904.mwd.entity.dto.UserDTO;
 import tch1904.mwd.entity.dto.UserProductDTO;
-import tch1904.mwd.repository.PlayListProductRepository;
-import tch1904.mwd.repository.PlayListRepository;
-import tch1904.mwd.repository.ProductRepository;
-import tch1904.mwd.repository.UserProductRepository;
+import tch1904.mwd.repository.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +35,9 @@ public class ProductServices {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private UserProductMapperRepository userProductMapperRepository;
 
     @Autowired
     private PlayListRepository playListRepository;
@@ -134,7 +134,7 @@ public class ProductServices {
 
     public List<UserProductDTO> getListOwnProduct() {
         try {
-            return userProductRepository
+            return userProductMapperRepository
                     .findAllByUsername(commonServices.getCurrentUser().getUsername());
         }catch (Exception e){
             throw e;
