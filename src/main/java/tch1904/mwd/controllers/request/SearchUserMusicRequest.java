@@ -5,13 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import tch1904.mwd.constant.components.Pagination;
 
-import java.time.Instant;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SearchRequestAddMoneyRequest {
-    private String username;
-    private Integer status;
+public class SearchUserMusicRequest {
     private Pagination pagination;
 }

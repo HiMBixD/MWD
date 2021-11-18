@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ApproveAddMoneyRequest {
-    private Integer requestId;
-    private Integer type; //0 default, 1 approve, 2 deny
+public class AddCommentsRequest {
+    private Integer productId;
+    private Integer parentId;
+    private String commentData;
 }

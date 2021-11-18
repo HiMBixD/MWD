@@ -7,6 +7,10 @@ import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -14,13 +18,26 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import tch1904.mwd.constant.AppConstants;
+import tch1904.mwd.constant.components.AppResponseException;
 import tch1904.mwd.constant.components.FileMetadata;
+import tch1904.mwd.constant.components.Message;
+import tch1904.mwd.constant.components.Pagination;
+import tch1904.mwd.controllers.request.RemoveFileRequest;
+import tch1904.mwd.controllers.request.SearchUserImageRequest;
+import tch1904.mwd.controllers.request.SimpleStringRequest;
 import tch1904.mwd.controllers.request.UploadFileRequest;
 import tch1904.mwd.entity.FileImg;
+import tch1904.mwd.entity.dto.FileDTO;
+import tch1904.mwd.entity.dto.FileImgDTO;
 import tch1904.mwd.entity.dto.FileMusic;
 import tch1904.mwd.repository.FileRepository;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FileServices {
@@ -54,6 +71,26 @@ public class FileServices {
 
     public FileImg getFileImg(String id) {
         return fileRepository.findById(id).get();
+    }
+
+    public Page<FileImgDTO> getImagesByUser(SearchUserImageRequest request) {
+        try {
+            Pageable pageable = PageRequest.of(request.getPagination().getPageNumber(), request.getPagination().getPageSize());
+            return fileRepository.findByUsernameAndFileType(commonServices.getCurrentUser().getUsername(), request.getFileType(),pageable);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void removeFileImg(RemoveFileRequest request) {
+        try {
+            if (StringUtils.isEmpty(request.getId())) {
+                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "FileId"));
+            }
+            fileRepository.deleteById(request.getId());
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public String uploadFileMusic(UploadFileRequest request) throws Exception {
@@ -92,5 +129,34 @@ public class FileServices {
         }
     }
 
+
+    public Page<FileDTO> getListMusicByUser(Pagination pagination){
+        try {
+            List<GridFSFile> files = new ArrayList<>();
+            gridFsTemplate
+                    .find(new Query(Criteria.where("metadata.username")
+                    .is(commonServices.getCurrentUser().getUsername())))
+                    .into(files);
+            Pageable pageable = PageRequest.of(pagination.getPageNumber(), pagination.getPageSize());
+
+            return new PageImpl<>(files.stream().map(FileDTO::new).collect(Collectors.toList())
+                    .subList(pagination.getPageNumber() * pagination.getPageSize(),
+                            Math.min((pagination.getPageSize() * (pagination.getPageNumber() + 1)), files.size())), pageable, files.size());
+
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void removeFileMusic(RemoveFileRequest request) {
+        try {
+            if (StringUtils.isEmpty(request.getId())) {
+                throw new AppResponseException(new Message(AppConstants.NOT_NULL, "FileId"));
+            }
+            gridFsTemplate.delete(new Query(Criteria.where("_id").is(request.getId())));
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 
 }

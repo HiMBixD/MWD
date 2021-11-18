@@ -1,6 +1,10 @@
 package tch1904.mwd.constant;
 
 public class AppConstants {
+    // Fee
+    public static final Double BUY_FEE = 0.1;
+    public static final Double PUBLISH_SONG_FEE = 10.0;
+
     public static final Boolean RESULT_SUCCESS = true;
     public static final Boolean RESULT_ERROR = false;
     public static final String SYSTEM_EMAIL = "wednotify@gmail.com";
@@ -21,6 +25,7 @@ public class AppConstants {
     public static final String NOT_ALLOWED = "NOT_ALLOWED";
 
     public static final String NOT_FOUND = "NOT_FOUND";
+    public static final String NOT_MATCHED = "NOT_MATCHED";
     public static final String DUPLICATE = "DUPLICATE";
     public static final String INVALID = "INVALID";
     public static final String EXISTED = "EXISTED";

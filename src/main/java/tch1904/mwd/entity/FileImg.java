@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "photo")
+@Document(collection = "photos")
 public class FileImg {
     @Id
     private String id;

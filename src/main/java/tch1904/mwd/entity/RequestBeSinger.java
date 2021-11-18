@@ -6,9 +6,9 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "request_add_money")
+@Table(name = "request_be_singer")
 @Data
-public class RequestAddMoney {
+public class RequestBeSinger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id", nullable = false)
@@ -17,14 +17,11 @@ public class RequestAddMoney {
     @Column(name = "username", length = 50, nullable = false)
     private String username;
 
-    @Column(name = "information")
-    private String information;
+    @Column(name = "link_file")
+    private String linkFile;
 
     @Column(name = "approve_details")
     private String approve_details;
-
-    @Column(name = "amount")
-    private Double amount;
 
     @Column(name = "status")
     private Integer status;
