@@ -15,10 +15,6 @@ public interface UserProductRepository extends JpaRepository<UserProduct, String
 //    Page<Product> searchListRequestAddMoney(@Param("username")String username,
 //                                                    @Param("status")Integer status, Pageable pageable);
 
-    List<UserProduct> findAllByProductId(Integer fileId);
-
-    List<UserProductDTO> findAllByUsername(String username);
-
     Optional<UserProduct> findByUsernameAndProductId(String username, Integer productId);
 
     List<UserProduct> findAllByProductIdAndMarkIsNotNull(Integer productId);
