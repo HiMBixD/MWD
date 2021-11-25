@@ -144,7 +144,7 @@ public class ProductServices {
     public Boolean isOwnProduct(Integer productId) {
         try {
             return userProductRepository
-                    .findByUsernameAndProductId(commonServices.getCurrentUser().getUsername(), productId).isPresent();
+                    .findByUsernameAndProductIdAndIsOwnIsTrue(commonServices.getCurrentUser().getUsername(), productId).isPresent();
         }catch (Exception e){
             throw e;
         }
