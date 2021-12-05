@@ -298,7 +298,11 @@ public class UserService {
             }
             User user = optionalUser.get();
             if (request.getType() == 1) {
-                user.setMoney(user.getMoney() + optional.get().getAmount());
+                Double money = user.getMoney() + optional.get().getAmount();
+                if (money < 0) {
+                    throw new AppResponseException(new Message(AppConstants.INVALID, "Money of this user is not enough"));
+                }
+                user.setMoney(money);
                 userRepository.save(user);
             }
             RequestAddMoney addMoney = optional.get();
